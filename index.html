@@ -4,58 +4,164 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Link Bio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #2c3e50, #3498db);
+      font-family: 'Poppins', sans-serif;
       color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       text-align: center;
-      padding: 50px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
     }
     img {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 3px solid #fff;
+      border: 3px solid rgba(255,255,255,0.6);
+      margin-bottom: 20px;
+      animation: fadeInDown 1.2s ease;
     }
     h1 {
-      margin: 20px 0 10px;
+      margin: 10px 0;
+      font-size: 28px;
+      animation: fadeInUp 1s ease;
     }
     p {
       margin: 0 0 20px;
       opacity: 0.8;
+      animation: fadeInUp 1.5s ease;
     }
-    a {
-      display: block;
-      margin: 10px auto;
-      padding: 15px;
-      width: 220px;
-      background: #fff;
-      color: #111;
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 280px;
+      animation: fadeInUp 2s ease;
+    }
+    .links a {
       text-decoration: none;
-      font-weight: bold;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    a:hover {
-      transform: scale(1.05);
+    .links a:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-3px) scale(1.05);
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 12px;
+      opacity: 0.6;
+      animation: fadeIn 2.5s ease;
+    }
+    /* Animations */
+    @keyframes fadeInUp {
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+    @keyframes fadeInDown {
+      from {opacity:0; transform:translateY(-20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
     }
   </style>
 </head>
 <body>
+  <canvas id="bg"></canvas>
+
   <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile">
   <h1>nothing</h1>
   <p>new better shortcut</p>
 
-  <a href="https://supremevaluelist.com/" target="_blank">mm2 value</a>
-  <a href="https://gmail.com" target="_blank">gmail</a>
-  <a href="https://discord.com/channels/1221935816515911850/1222331385449021510" target="_blank">discord</a>
-  <a href="https://quran.com" target="_blank">quran</a>
-  <a href="https://poki.com" target="_blank">poki games</a>
-  <a href="https://cstimer.net/" target="_blank">speed runner</a>
-  <a href="https://tiktok.com" target="_blank">tiktok</a>
-  <a href="https://facebook.com" target="_blank">facebook</a>
-  <a href="https://youtube.com" target="_blank">youtube</a>
+  <div class="links">
+    <a href="https://supremevaluelist.com/" target="_blank">mm2 value</a>
+    <a href="https://gmail.com" target="_blank">gmail</a>
+    <a href="https://discord.com/channels/1221935816515911850/1222331385449021510" target="_blank">discord</a>
+    <a href="https://quran.com" target="_blank">quran</a>
+    <a href="https://poki.com" target="_blank">poki games</a>
+    <a href="https://cstimer.net/" target="_blank">speed runner</a>
+    <a href="https://tiktok.com" target="_blank">tiktok</a>
+    <a href="https://facebook.com" target="_blank">facebook</a>
+    <a href="https://youtube.com" target="_blank">youtube</a>
+  </div>
+
+  <footer>© 2025 Link Bio</footer>
+
+  <script>
+    // Background Particles
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const numParticles = 70;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < numParticles; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+  </script>
 </body>
 </html>
